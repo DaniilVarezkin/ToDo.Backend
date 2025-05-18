@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ToDo.Application.Common.Mapping;
 using ToDo.Domain.Enums;
+using ToDo.Domain.Models;
 
 namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
 {
@@ -14,7 +15,17 @@ namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
 
         public void ConfigureMapping(Profile profile)
         {
-            throw new NotImplementedException();
+            profile.CreateMap<TaskItem, TaskItemLookupDto>()
+                .ForMember(vm => vm.Id, opt =>
+                    opt.MapFrom(task => task.Id))
+                .ForMember(vm => vm.Title, opt =>
+                    opt.MapFrom(task => task.Title))
+                .ForMember(vm => vm.Description, opt =>
+                    opt.MapFrom(task => task.Description))
+                .ForMember(vm => vm.DueDate, opt =>
+                    opt.MapFrom(task => task.DueDate))
+                .ForMember(vm => vm.Status, opt =>
+                    opt.MapFrom(task => task.Status));
         }
     }
 }
