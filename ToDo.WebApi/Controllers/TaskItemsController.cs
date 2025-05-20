@@ -10,23 +10,36 @@ using ToDo.WebApi.Models.TaskItems;
 
 namespace ToDo.WebApi.Controllers
 {
-    [Authorize]
+    /// <summary>
+    /// Контроллер задач.
+    /// </summary>
+    /// <remarks>
+    /// Предоставляет методы для получения, создания, обновления и удаления
+    /// задач текущего авторизованного пользователя.
+    /// </remarks>
+    [ApiController]
     [Route("api/[controller]/[action]")]
     public class TaskItemsController : BaseController
     {
         public readonly IMapper _mapper;
         public TaskItemsController(IMapper mapper) => _mapper = mapper;
 
-        /// <summary>
-        /// Get the list of task items
+        /// <summary xml:lang="en">
+        /// Get the list of task items.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Получить список элементов задач.
         /// </summary>
         /// <remarks>
         /// Sample request:
         /// GET api/taskitems
         /// </remarks>
-        /// <returns>Returns TaskItemListVm</returns>
-        /// <response code="200">Success</response>
-        /// <response code="401">If the user is unauthorized</response>
+        /// <returns xml:lang="en">Returns TaskItemListVm.</returns>
+        /// <returns xml:lang="ru">Возвращает TaskItemListVm.</returns>
+        /// <response code="200" xml:lang="en">Success.</response>
+        /// <response code="200" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,17 +54,24 @@ namespace ToDo.WebApi.Controllers
             return Ok(vm);
         }
 
-        /// <summary>
-        /// Get the task item by id
+        /// <summary xml:lang="en">
+        /// Get the task item by id.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Получить элемент задачи по идентификатору.
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// GET api/taskitems/F091F1EC-ED13-4D2D-BF4A-E340403D9531
+        /// GET api/taskitems/{id}
         /// </remarks>
-        /// <param name="id">Task item id (guid)</param>
-        /// <returns>Returns TaskItemDetailsVm</returns>
-        /// <response code="200">Success</response>
-        /// <response code="401">If the user is unauthorized</response>
+        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
+        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
+        /// <returns xml:lang="en">Returns TaskItemDetailsVm.</returns>
+        /// <returns xml:lang="ru">Возвращает TaskItemDetailsVm.</returns>
+        /// <response code="200" xml:lang="en">Success.</response>
+        /// <response code="200" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
         [HttpGet("{id}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -68,8 +88,11 @@ namespace ToDo.WebApi.Controllers
             return Ok(vm);
         }
 
-        /// <summary>
-        /// Creates a new task item
+        /// <summary xml:lang="en">
+        /// Creates a new task item.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Создает новый элемент задачи.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -87,10 +110,14 @@ namespace ToDo.WebApi.Controllers
         ///     "priority": 2
         /// }
         /// </remarks>
-        /// <param name="createTaskItemDto">CreateTaskItemDto object</param>
-        /// <returns>Returns id (guid)</returns>
-        /// <response code="200">Success</response>
-        /// <response code="401">If the user is unauthorized</response>
+        /// <param name="createTaskItemDto" xml:lang="en">CreateTaskItemDto object.</param>
+        /// <param name="createTaskItemDto" xml:lang="ru">Объект CreateTaskItemDto.</param>
+        /// <returns xml:lang="en">Returns id (GUID).</returns>
+        /// <returns xml:lang="ru">Возвращает идентификатор (GUID).</returns>
+        /// <response code="200" xml:lang="en">Success.</response>
+        /// <response code="200" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
         [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -104,8 +131,11 @@ namespace ToDo.WebApi.Controllers
             return Ok(taskItemId);
         }
 
-        /// <summary>
-        /// Updates an existing task item
+        /// <summary xml:lang="en">
+        /// Updates an existing task item.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Обновляет существующий элемент задачи.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -124,10 +154,14 @@ namespace ToDo.WebApi.Controllers
         ///     "priority": 1
         /// }
         /// </remarks>
-        /// <param name="updateTaskItemDto">UpdateTaskItemDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">If the user is unauthorized</response>
+        /// <param name="updateTaskItemDto" xml:lang="en">UpdateTaskItemDto object.</param>
+        /// <param name="updateTaskItemDto" xml:lang="ru">Объект UpdateTaskItemDto.</param>
+        /// <returns xml:lang="en">Returns NoContent.</returns>
+        /// <returns xml:lang="ru">Не возвращает содержимого.</returns>
+        /// <response code="204" xml:lang="en">Success.</response>
+        /// <response code="204" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
         [HttpPut]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -141,17 +175,24 @@ namespace ToDo.WebApi.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// Deletes the task item by id
+        /// <summary xml:lang="en">
+        /// Deletes the task item by id.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Удаляет элемент задачи по идентификатору.
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// DELETE api/taskitems/F435F181-DB34-409A-A19D-85A495E5C54C
+        /// DELETE api/taskitems/{id}
         /// </remarks>
-        /// <param name="id">Task item id (guid)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">If the user is unauthorized</response>
+        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
+        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
+        /// <returns xml:lang="en">Returns NoContent.</returns>
+        /// <returns xml:lang="ru">Не возвращает содержимого.</returns>
+        /// <response code="204" xml:lang="en">Success.</response>
+        /// <response code="204" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
         [HttpDelete("{id}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

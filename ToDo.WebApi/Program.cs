@@ -28,6 +28,12 @@ builder.Services.AddSwaggerGen(config =>
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     config.IncludeXmlComments(xmlPath);
+
+    var xmlDomain = Path.Combine(AppContext.BaseDirectory, "ToDo.Domain.xml");
+    config.IncludeXmlComments(xmlDomain);
+
+    var xmlApplication = Path.Combine(AppContext.BaseDirectory, "ToDo.Application.xml");
+    config.IncludeXmlComments(xmlApplication);
 });
 
 var app = builder.Build();

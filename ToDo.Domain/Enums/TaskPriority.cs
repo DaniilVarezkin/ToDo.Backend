@@ -1,7 +1,28 @@
 ﻿namespace ToDo.Domain.Models
 {
+    /// <summary>
+    /// Перечисление приоритетов задач.
+    /// </summary>
+    public enum TaskPriority : byte
+    {
+        /// <summary>
+        /// Приоритет не задан.
+        /// </summary>
+        None = 0,
 
-    public enum TaskPriority : byte { None, Low, Medium, High }
+        /// <summary>
+        /// Низкий приоритет.
+        /// </summary>
+        Low,
 
+        /// <summary>
+        /// Средний приоритет.
+        /// </summary>
+        Medium,
 
+        /// <summary>
+        /// Высокий приоритет.
+        /// </summary>
+        High
+    }
 }
