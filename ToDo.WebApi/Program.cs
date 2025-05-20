@@ -2,6 +2,7 @@ using System.Reflection;
 using ToDo.Application;
 using ToDo.Application.Common.Mapping;
 using ToDo.Persistance;
+using ToDo.WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,15 +37,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.UseCustomExceptionHandler();
 app.UseHttpsRedirection();
 app.UseRouting();
 
 //Добавить CORS
 
 app.UseStaticFiles();
-
-//CustomExceptionHandler
-
 
 app.UseAuthentication();
 app.UseAuthorization();
