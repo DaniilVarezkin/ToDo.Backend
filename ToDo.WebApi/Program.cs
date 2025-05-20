@@ -23,6 +23,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+//Инициализация БД
 using (var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
