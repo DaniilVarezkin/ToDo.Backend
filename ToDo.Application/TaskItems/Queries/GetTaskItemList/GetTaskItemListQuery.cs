@@ -1,14 +1,13 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
 {
+    /// <summary>
+    /// Запрос на получение списка задач пользователя
+    /// </summary>
     public class GetTaskItemListQuery : IRequest<TaskItemListVm>
     {
+        /// <summary>Идентификатор пользователя</summary>
         public Guid UserId { get; set; }
     }
 }

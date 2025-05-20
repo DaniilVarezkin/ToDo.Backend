@@ -4,41 +4,37 @@ using ToDo.Domain.Models;
 
 namespace ToDo.Application.TaskItems.Commands.CreateTaskItem
 {
-    public class CreateTaskItemCommandHandler
-        : IRequestHandler<CreateTaskItemCommand, Guid>
+    public class CreateTaskItemCommandHandler : IRequestHandler<CreateTaskItemCommand, Guid>
     {
         private readonly IAppDbContext _dbContext;
+
         public CreateTaskItemCommandHandler(IAppDbContext dbContext) =>
             _dbContext = dbContext;
+
         public async Task<Guid> Handle(CreateTaskItemCommand request, CancellationToken cancellationToken)
         {
-            using (var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken))
+            var taskItem = new TaskItem
             {
-                try
-                {
-                    var taskItem = new TaskItem
-                    {
-                        UserId = request.UserId,
-                        Title = request.Title,
-                        Description = request.Description,
-                        DueDate = request.DueDate,
-                        Status = request.Status,
-                        CreateDate = DateTime.Now,
-                        UpdateDate = DateTime.Now,
-                    };
+                Id = Guid.NewGuid(),
+                UserId = request.UserId,
+                Title = request.Title,
+                Description = request.Description,
+                IsAllDay = request.IsAllDay,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Color = request.Color,
+                IsRecurring = request.IsRecurring,
+                RecurrenceRule = request.RecurrenceRule,
+                CreateDate = DateTimeOffset.UtcNow,
+                UpdateDate = DateTimeOffset.UtcNow,
+                Status = request.Status,
+                Priority = request.Priority
+            };
 
-                    await _dbContext.TaskItems.AddAsync(taskItem, cancellationToken);
-                    await _dbContext.SaveChangesAsync(cancellationToken);
-                    await transaction.CommitAsync(cancellationToken);
+            _dbContext.TaskItems.Add(taskItem);
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
-                    return taskItem.Id;
-                }
-                catch
-                {
-                    await transaction.RollbackAsync(cancellationToken);
-                    throw;
-                }
-            }
+            return taskItem.Id;
         }
     }
 }

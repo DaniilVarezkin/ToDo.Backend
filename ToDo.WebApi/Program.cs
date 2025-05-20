@@ -3,6 +3,8 @@ using ToDo.Application;
 using ToDo.Application.Common.Mapping;
 using ToDo.Persistance;
 using ToDo.WebApi.Middleware;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +23,22 @@ builder.Services.AddPersistance(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 
+builder.Services.AddSwaggerGen(config =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    config.IncludeXmlComments(xmlPath);
+
+    var xmlDomain = Path.Combine(AppContext.BaseDirectory, "ToDo.Domain.xml");
+    config.IncludeXmlComments(xmlDomain);
+
+    var xmlApplication = Path.Combine(AppContext.BaseDirectory, "ToDo.Application.xml");
+    config.IncludeXmlComments(xmlApplication);
+});
+
 var app = builder.Build();
 
+//Инициализация БД
 using (var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
@@ -50,6 +66,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//Swagger
+app.UseSwagger();
+app.UseSwaggerUI(cfg =>
+{
+    cfg.RoutePrefix = string.Empty;
+    cfg.SwaggerEndpoint("swagger/v1/swagger.json", "ToDo API");
+});
 
 app.Run();
