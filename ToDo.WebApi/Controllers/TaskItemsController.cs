@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Application.TaskItems.Commands.CreateTaskItem;
 using ToDo.Application.TaskItems.Commands.DeleteTaskItem;
@@ -9,6 +10,7 @@ using ToDo.WebApi.Models.TaskItems;
 
 namespace ToDo.WebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     public class TaskItemsController : BaseController
     {

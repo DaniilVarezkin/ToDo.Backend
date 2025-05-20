@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ToDo.Persistance.Identity;
+using ToDo.Persistance.Services;
 using ToDo.WebApi.Models.Auth;
 
 namespace ToDo.WebApi.Controllers
@@ -15,13 +17,15 @@ namespace ToDo.WebApi.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly JwtService _jwtService;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration, JwtService jwtService)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -29,8 +33,8 @@ namespace ToDo.WebApi.Controllers
         {
             var user = new ApplicationUser
             {
-                UserName = dto.Email,
-                Email = dto.Email
+                UserName = dto.UserName,
+                Email = dto.Email,
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -51,41 +55,9 @@ namespace ToDo.WebApi.Controllers
             if (!passwordValid)
                 return Unauthorized("Неверный логин или пароль");
 
-            var token = GenerateJwtToken(user);
+            var token = _jwtService.GenerateJwtToken(user);
             return Ok(new { Token = token });
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
-        {
-            // 1) Собираем claims
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            // 2) Берём настройки из appsettings.json
-            var key = _configuration["Jwt:Key"];
-            var issuer = _configuration["Jwt:Issuer"];
-            var audience = _configuration["Jwt:Audience"];
-
-            // 3) Генерируем симметричный ключ и креденшалы
-            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var creds = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-
-            // 4) Создаём сам токен
-            var jwt = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: creds
-            );
-
-            // 5) Превращаем в строку
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
-        }
     }
 }
