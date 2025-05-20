@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using System.Reflection;
+using FluentValidation;
+using ToDo.Application.Common.Behaviors;
 
 namespace ToDo.Application
 {
@@ -11,6 +13,11 @@ namespace ToDo.Application
         {
             services.AddMediatR(config =>
                 config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
+            //Реистрация валидации
+            services.AddValidatorsFromAssemblies(new[] {Assembly.GetExecutingAssembly()});
+            services.AddTransient(
+                typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             return services;
         }
