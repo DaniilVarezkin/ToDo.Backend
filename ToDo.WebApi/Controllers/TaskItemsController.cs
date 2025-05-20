@@ -5,7 +5,7 @@ using ToDo.Application.TaskItems.Commands.DeleteTaskItem;
 using ToDo.Application.TaskItems.Commands.UpdateTaskItem;
 using ToDo.Application.TaskItems.Queries.GetTaskItemDetails;
 using ToDo.Application.TaskItems.Queries.GetTaskItemList;
-using ToDo.WebApi.Models;
+using ToDo.WebApi.Models.TaskItems;
 
 namespace ToDo.WebApi.Controllers
 {

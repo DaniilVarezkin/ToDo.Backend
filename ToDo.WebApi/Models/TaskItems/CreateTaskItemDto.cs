@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using ToDo.Application.Common.Mapping;
 using ToDo.Application.TaskItems.Commands.CreateTaskItem;
-using ToDo.Application.TaskItems.Commands.UpdateTaskItem;
 using ToDo.Domain.Enums;
 
-namespace ToDo.WebApi.Models
+namespace ToDo.WebApi.Models.TaskItems
 {
-    public class UpdateTaskItemDto : IMapped
+    public class CreateTaskItemDto : IMapped
     {
-        public required Guid Id { get; set; }
-        public required Guid UserId { get; set; }
         public required string Title { get; set; }
         public required string Description { get; set; }
         public required DateTime DueDate { get; set; }
@@ -17,9 +14,7 @@ namespace ToDo.WebApi.Models
 
         public void ConfigureMapping(Profile profile)
         {
-            profile.CreateMap<UpdateTaskItemDto, UpdateTaskItemCommand>()
-                .ForMember(command => command.Id, opt =>
-                    opt.MapFrom(dto => dto.Id))
+            profile.CreateMap<CreateTaskItemDto, CreateTaskItemCommand>()
                 .ForMember(command => command.Title, opt =>
                     opt.MapFrom(dto => dto.Title))
                 .ForMember(command => command.Description, opt =>
