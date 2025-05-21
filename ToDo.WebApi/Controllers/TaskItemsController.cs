@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Application.TaskItems.Commands.CreateTaskItem;
 using ToDo.Application.TaskItems.Commands.DeleteTaskItem;
+using ToDo.Application.TaskItems.Commands.PartialUpdateTaskItem;
 using ToDo.Application.TaskItems.Commands.UpdateTaskItem;
 using ToDo.Application.TaskItems.Queries.GetTaskItemDetails;
 using ToDo.Application.TaskItems.Queries.GetTaskItemList;
@@ -58,7 +59,7 @@ namespace ToDo.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<TaskItemListVm>> GetAll(
+        public async Task<ActionResult<PagedResult<TaskItemLookupDto>>> GetAll(
             [FromQuery] GetTaskItemListQueryDto queryDto)
         {
             var query = _mapper.Map<GetTaskItemListQuery>(queryDto);
@@ -182,6 +183,43 @@ namespace ToDo.WebApi.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateTaskItemDto updateTaskItemDto)
         {
             var command = _mapper.Map<UpdateTaskItemCommand>(updateTaskItemDto);
+            command.UserId = UserId;
+
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary xml:lang="en">
+        /// Partially updates a task item.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Частично обновляет элемент задачи.
+        /// </summary>
+        /// <remarks xml:lang="en">
+        /// Sample request:
+        /// PATCH api/taskitems/partialupdate
+        /// {
+        ///     "id": "F091F1EC-ED13-4D2D-BF4A-E340403D9531",
+        ///     "status": 2,
+        ///     "completedDate": "2025-05-21T14:00:00Z"
+        /// }
+        /// </remarks>
+        /// <param name="partialUpdateTaskItemDto" xml:lang="en">DTO containing fields to update.</param>
+        /// <param name="partialUpdateTaskItemDto" xml:lang="ru">DTO с полями для обновления.</param>
+        /// <response code="204" xml:lang="en">NoContent.</response>
+        /// <response code="204" xml:lang="ru">Нет содержимого.</response>
+        /// <response code="400" xml:lang="en">Bad request if validation fails.</response>
+        /// <response code="400" xml:lang="ru">Неверный запрос при ошибке валидации.</response>
+        /// <response code="401" xml:lang="en">Unauthorized if user is not authenticated.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не аутентифицирован.</response>
+        [HttpPatch]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> PartialUpdate([FromBody] PartialUpdateTaskItemDto partialUpdateTaskItemDto)
+        {
+            var command = _mapper.Map<PartialUpdateTaskItemCommand>(partialUpdateTaskItemDto);
             command.UserId = UserId;
 
             await Mediator.Send(command);

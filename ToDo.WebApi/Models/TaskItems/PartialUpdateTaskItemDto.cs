@@ -1,86 +1,79 @@
 ﻿using AutoMapper;
 using System.ComponentModel.DataAnnotations;
 using ToDo.Application.Common.Mapping;
-using ToDo.Application.TaskItems.Commands.UpdateTaskItem;
+using ToDo.Application.TaskItems.Commands.PartialUpdateTaskItem;
 using ToDo.Domain.Enums;
 using ToDo.Domain.Models;
 
 namespace ToDo.WebApi.Models.TaskItems
 {
     /// <summary>
-    /// DTO для обновления существующего элемента задачи.
+    /// DTO для частичного обновления элемента задачи.
     /// </summary>
-    public class UpdateTaskItemDto : IMapped
+    public class PartialUpdateTaskItemDto : IMapped
     {
         /// <summary>
-        /// Идентификатор элемента задачи, который нужно обновить.
+        /// Идентификатор обновляемого элемента задачи.
         /// </summary>
-        [Required]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Заголовок элемента задачи. Максимальная длина — 250 символов.
+        /// Новое значение заголовка задачи (необязательно).
         /// </summary>
-        [Required]
-        [MaxLength(250)]
-        public string Title { get; set; } = null!;
+        public string? Title { get; set; }
 
         /// <summary>
-        /// Дополнительное описание элемента задачи. Максимальная длина — 1000 символов.
+        /// Новое значение описания задачи (необязательно).
         /// </summary>
-        [MaxLength(1000)]
         public string? Description { get; set; }
 
         /// <summary>
-        /// Флаг, указывающий, что задача занимает весь день.
+        /// Обновление флага «задача на весь день» (необязательно).
         /// </summary>
-        public bool IsAllDay { get; set; } = false;
+        public bool? IsAllDay { get; set; }
 
         /// <summary>
-        /// Дата и время начала задачи.
+        /// Новое значение даты и времени начала задачи (необязательно).
         /// </summary>
-        [Required]
-        public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
 
         /// <summary>
-        /// Дата и время окончания задачи. Должно быть больше или равно StartDate.
+        /// Новое значение даты и времени окончания задачи (необязательно).
         /// </summary>
-        [Required]
-        public DateTimeOffset EndDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
 
         /// <summary>
-        /// Цвет отображения в формате HEX (например, "#FF0000").
+        /// Обновление цвета отображения в формате HEX или названии цвета (необязательно).
         /// </summary>
-        [MaxLength(20)]
         public string? Color { get; set; }
 
         /// <summary>
-        /// Флаг, указывающий на повторяемость задачи.
+        /// Обновление флага повторяемости задачи (необязательно).
         /// </summary>
-        public bool IsRecurring { get; set; } = false;
+        public bool? IsRecurring { get; set; }
 
         /// <summary>
-        /// Правило повторения в формате iCal RRULE (применяется, если IsRecurring = true).
+        /// Новое правило повторения в формате iCal RRULE (необязательно).
         /// </summary>
         public string? RecurrenceRule { get; set; }
 
         /// <summary>
-        /// Текущий статус задачи.
+        /// Обновление статуса задачи (необязательно).
         /// </summary>
-        public UserTaskStatus Status { get; set; } = UserTaskStatus.None;
+        public UserTaskStatus? Status { get; set; }
 
         /// <summary>
-        /// Приоритет задачи.
+        /// Обновление приоритета задачи (необязательно).
         /// </summary>
-        public TaskPriority Priority { get; set; } = TaskPriority.Medium;
+        public TaskPriority? Priority { get; set; }
 
         /// <summary>
-        /// Настраивает маппинг AutoMapper от DTO к команде UpdateTaskItemCommand.
+        /// Настраивает маппинг AutoMapper из этого DTO в команду <see cref="PartialUpdateTaskItemCommand"/>.
         /// </summary>
         /// <param name="profile">Профиль AutoMapper для конфигурации.</param>
         public void ConfigureMapping(Profile profile)
         {
-            profile.CreateMap<UpdateTaskItemDto, UpdateTaskItemCommand>()
+            profile.CreateMap<PartialUpdateTaskItemDto, PartialUpdateTaskItemCommand>()
                 .ForMember(cmd => cmd.Id, opt => opt.MapFrom(dto => dto.Id))
                 .ForMember(cmd => cmd.Title, opt => opt.MapFrom(dto => dto.Title))
                 .ForMember(cmd => cmd.Description, opt => opt.MapFrom(dto => dto.Description))
@@ -95,3 +88,4 @@ namespace ToDo.WebApi.Models.TaskItems
         }
     }
 }
+
