@@ -1,7 +1,8 @@
 ﻿namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
 {
+    
     /// <summary>
-    /// ViewModel списка задач
+    /// (Depricated) ViewModel списка задач
     /// </summary>
     public class TaskItemListVm
     {

@@ -7,7 +7,7 @@ using ToDo.Application.Interfaces;
 namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
 {
     public class GetTaskItemListQueryHandler
-        : IRequestHandler<GetTaskItemListQuery, PagedResult<TaskItemLookupDto>
+        : IRequestHandler<GetTaskItemListQuery, PagedResult<TaskItemLookupDto>>
     {
         private readonly IAppDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -56,8 +56,7 @@ namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
                                     ? baseQuery.OrderByDescending(taskItem => taskItem.EndDate)
                                     : baseQuery.OrderBy(taskItem => taskItem.EndDate),
                 _ => baseQuery.OrderBy(taskItem => taskItem.CreateDate)
-
-            };
+            }; //Поменять базу данных
 
             var taskItemsPaged = await baseQuery
                 .Skip((request.Page - 1) * request.PageSize)

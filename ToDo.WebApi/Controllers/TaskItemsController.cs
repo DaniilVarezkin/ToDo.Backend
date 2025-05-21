@@ -44,14 +44,12 @@ namespace ToDo.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<TaskItemListVm>> GetAll()
-        {
-            var query = new GetTaskItemListQuery
-            {
-                UserId = UserId
-            };
-            var vm = await Mediator.Send(query);
-            return Ok(vm);
+        public async Task<ActionResult<TaskItemListVm>> GetAll(
+            [FromQuery] GetTaskItemListQuery query)
+        { 
+            query.UserId = UserId;
+            var result = await Mediator.Send(query);
+            return Ok(result);
         }
 
         /// <summary xml:lang="en">

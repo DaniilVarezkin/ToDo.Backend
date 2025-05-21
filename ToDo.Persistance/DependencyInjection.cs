@@ -21,13 +21,11 @@ namespace ToDo.Persistance
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            // Чтение строки подключения из конфигурации
             var connectionString = configuration["DbConnectionString"];
 
-            // Регистрация контекста базы данных с использованием SQLite
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlite(connectionString);
+                options.UseNpgsql(connectionString);
             });
 
             // Регистрация абстракции IAppDbContext для использования в слоях Application и Domain
