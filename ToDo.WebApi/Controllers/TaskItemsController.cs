@@ -25,17 +25,31 @@ namespace ToDo.WebApi.Controllers
         public TaskItemsController(IMapper mapper) => _mapper = mapper;
 
         /// <summary xml:lang="en">
-        /// Get the list of task items.
+        /// Get the list of task items with filtering, sorting and pagination.
         /// </summary>
         /// <summary xml:lang="ru">
-        /// Получить список элементов задач.
+        /// Получить список элементов задач с фильтрацией, сортировкой и пагинацией.
         /// </summary>
-        /// <remarks>
+        /// <remarks xml:lang="en">
         /// Sample request:
-        /// GET api/taskitems
+        /// GET api/taskitems?page=1&pageSize=10&status=Done&priority=High&search=meeting
         /// </remarks>
-        /// <returns xml:lang="en">Returns TaskItemListVm.</returns>
-        /// <returns xml:lang="ru">Возвращает TaskItemListVm.</returns>
+        /// <remarks xml:lang="ru">
+        /// Пример запроса:
+        /// GET api/taskitems?page=1&pageSize=10&status=Done&priority=High&search=meeting
+        /// </remarks>
+        /// <param name="queryDto" xml:lang="en">
+        /// Query parameters for filtering (Status, Priority, IsAllDay, DateFrom/DateTo, Search), sorting (SortBy, SortDescending) and pagination (Page, PageSize).
+        /// </param>
+        /// <param name="queryDto" xml:lang="ru">
+        /// Параметры запроса для фильтрации (Status, Priority, IsAllDay, DateFrom/DateTo, Search), сортировки (SortBy, SortDescending) и пагинации (Page, PageSize).
+        /// </param>
+        /// <returns xml:lang="en">
+        /// Returns a paged list of task items (TaskItemListVm).
+        /// </returns>
+        /// <returns xml:lang="ru">
+        /// Возвращает постраничный список элементов задач (TaskItemListVm).
+        /// </returns>
         /// <response code="200" xml:lang="en">Success.</response>
         /// <response code="200" xml:lang="ru">Успешно.</response>
         /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
@@ -45,8 +59,9 @@ namespace ToDo.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<TaskItemListVm>> GetAll(
-            [FromQuery] GetTaskItemListQuery query)
-        { 
+            [FromQuery] GetTaskItemListQueryDto queryDto)
+        {
+            var query = _mapper.Map<GetTaskItemListQuery>(queryDto);
             query.UserId = UserId;
             var result = await Mediator.Send(query);
             return Ok(result);
