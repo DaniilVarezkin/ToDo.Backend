@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ToDo.Application.TaskItems.Commands.CompleteTaskItem;
 using ToDo.Application.TaskItems.Commands.CreateTaskItem;
 using ToDo.Application.TaskItems.Commands.DeleteTaskItem;
 using ToDo.Application.TaskItems.Commands.PartialUpdateTaskItem;
+using ToDo.Application.TaskItems.Commands.ReopenTaskItem;
 using ToDo.Application.TaskItems.Commands.UpdateTaskItem;
 using ToDo.Application.TaskItems.Queries.GetTaskItemDetails;
 using ToDo.Application.TaskItems.Queries.GetTaskItemList;
@@ -222,6 +224,72 @@ namespace ToDo.WebApi.Controllers
             var command = _mapper.Map<PartialUpdateTaskItemCommand>(partialUpdateTaskItemDto);
             command.UserId = UserId;
 
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+
+        /// <summary xml:lang="en">
+        /// Marks the task item as completed.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Отмечает элемент задачи как выполненный.
+        /// </summary>
+        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
+        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
+        /// <response code="204" xml:lang="en">No Content.</response>
+        /// <response code="204" xml:lang="ru">Не возвращает содержимого.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
+        /// <remarks>
+        /// Sample request:
+        /// POST api/taskitems/complete/{id}
+        /// </remarks>
+        [HttpPost("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Complete(Guid id)
+        {
+            var command = new CompleteTaskItemCommand
+            {
+                Id = id,
+                UserId = UserId
+            };
+
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+
+
+        /// <summary xml:lang="en">
+        /// Reopens a completed task item, resetting its status to Todo.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Снимает отметку о выполнении задачи и переводит её в статус Todo.
+        /// </summary>
+        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
+        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
+        /// <response code="204" xml:lang="en">No Content.</response>
+        /// <response code="204" xml:lang="ru">Не возвращает содержимого.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
+        /// <remarks>
+        /// Sample request:
+        /// POST api/taskitems/reopen/{id}
+        /// </remarks>
+        [HttpPost("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Reopen(Guid id)
+        {
+            var command = new ReopenTaskItemCommand
+            {
+                Id = id,
+                UserId = UserId
+            };
             await Mediator.Send(command);
             return NoContent();
         }
