@@ -3,7 +3,7 @@ using ToDo.Application.Common.Mapping;
 using ToDo.Domain.Enums;
 using ToDo.Domain.Models;
 
-namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
+namespace ToDo.Application.TaskItems.Queries.Common
 {
     /// <summary>
     /// DTO для списка задач

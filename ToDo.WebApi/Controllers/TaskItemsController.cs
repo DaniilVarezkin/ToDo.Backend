@@ -7,6 +7,8 @@ using ToDo.Application.TaskItems.Commands.DeleteTaskItem;
 using ToDo.Application.TaskItems.Commands.PartialUpdateTaskItem;
 using ToDo.Application.TaskItems.Commands.ReopenTaskItem;
 using ToDo.Application.TaskItems.Commands.UpdateTaskItem;
+using ToDo.Application.TaskItems.Queries.Common;
+using ToDo.Application.TaskItems.Queries.GetCalendarTaskItem;
 using ToDo.Application.TaskItems.Queries.GetTaskItemDetails;
 using ToDo.Application.TaskItems.Queries.GetTaskItemList;
 using ToDo.WebApi.Models.TaskItems;
@@ -325,6 +327,62 @@ namespace ToDo.WebApi.Controllers
             };
             await Mediator.Send(command);
             return NoContent();
+        }
+
+
+
+        /// <summary xml:lang="en">
+        /// Get task items for the calendar view within the specified date range.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Получить элементы задач для календаря в заданном диапазоне дат.
+        /// </summary>
+        /// <remarks xml:lang="en">
+        /// Sample request:
+        /// GET api/taskitems/calendar?start=2025-05-01T00:00:00+02:00&amp;end=2025-05-31T23:59:59+02:00
+        /// </remarks>
+        /// <remarks xml:lang="ru">
+        /// Пример запроса:
+        /// GET api/taskitems/calendar?start=2025-05-01T00:00:00+02:00&amp;end=2025-05-31T23:59:59+02:00
+        /// </remarks>
+        /// <param name="start" xml:lang="en">
+        /// The inclusive start date/time of the range to retrieve calendar items for.
+        /// </param>
+        /// <param name="start" xml:lang="ru">
+        /// Включающая начальная дата/время диапазона для получения элементов календаря.
+        /// </param>
+        /// <param name="end" xml:lang="en">
+        /// The inclusive end date/time of the range to retrieve calendar items for.
+        /// </param>
+        /// <param name="end" xml:lang="ru">
+        /// Включающая конечная дата/время диапазона для получения элементов календаря.
+        /// </param>
+        /// <returns xml:lang="en">
+        /// Returns a CalendarTaskItemsVm containing task items mapped for calendar display.
+        /// </returns>
+        /// <returns xml:lang="ru">
+        /// Возвращает объект CalendarTaskItemsVm с элементами задач для отображения в календаре.
+        /// </returns>
+        /// <response code="200" xml:lang="en">Success.</response>
+        /// <response code="200" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<CalendarTaskItemsVm>> Calendar(
+            [FromQuery] DateTimeOffset start,
+            [FromQuery] DateTimeOffset end)
+        {
+            var query = new GetCalendarTaskItemQuery
+            {
+                UserId = UserId,
+                StartDate = start,
+                EndDate = end
+            };
+            var result = await Mediator.Send(query);
+            return Ok(result);
         }
     }
 }
