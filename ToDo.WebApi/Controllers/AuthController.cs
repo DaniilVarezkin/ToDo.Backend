@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Persistance.Identity;
 using ToDo.Persistance.Services;
@@ -7,7 +8,7 @@ using ToDo.WebApi.Models.Auth;
 namespace ToDo.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/auth")]
+    [Route("api/[controller]/[action]")]
     public class AuthController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -35,7 +36,8 @@ namespace ToDo.WebApi.Controllers
         /// <response code="200" xml:lang="ru">Пользователь успешно создан.</response>
         /// <response code="400" xml:lang="en">Validation error or creation failed.</response>
         /// <response code="400" xml:lang="ru">Ошибка валидации или создание пользователя не удалось.</response>
-        [HttpPost("register")]
+        [AllowAnonymous]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
@@ -70,7 +72,8 @@ namespace ToDo.WebApi.Controllers
         /// <response code="200" xml:lang="ru">Аутентификация прошла успешно.</response>
         /// <response code="401" xml:lang="en">Invalid credentials.</response>
         /// <response code="401" xml:lang="ru">Неверные учетные данные.</response>
-        [HttpPost("login")]
+        [AllowAnonymous]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)

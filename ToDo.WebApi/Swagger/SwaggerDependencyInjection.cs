@@ -31,21 +31,8 @@ namespace ToDo.WebApi.Swagger
                     Description = "Введите JWT"
                 });
 
-                // Применение схемы ко всем операциям
-                config.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id   = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
+                //Добавляем авторизацию только на методы с атрибутом [Authorize]
+                config.OperationFilter<AuthorizeCheckOperationFilter>();
 
                 //Добавления описания к перечислениям
                 config.AddEnumsWithValuesFixFilters(opt =>

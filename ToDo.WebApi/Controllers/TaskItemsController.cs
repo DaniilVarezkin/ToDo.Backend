@@ -37,11 +37,7 @@ namespace ToDo.WebApi.Controllers
         /// </summary>
         /// <remarks xml:lang="en">
         /// Sample request:
-        /// GET api/taskitems?page=1&pageSize=10&status=Done&priority=High&search=meeting
-        /// </remarks>
-        /// <remarks xml:lang="ru">
-        /// Пример запроса:
-        /// GET api/taskitems?page=1&pageSize=10&status=Done&priority=High&search=meeting
+        /// GET api/taskitems?page=1&amp;pageSize=10&amp;status=Done&amp;priority=High&amp;search=meeting
         /// </remarks>
         /// <param name="queryDto" xml:lang="en">
         /// Query parameters for filtering (Status, Priority, IsAllDay, DateFrom/DateTo, Search), sorting (SortBy, SortDescending) and pagination (Page, PageSize).
