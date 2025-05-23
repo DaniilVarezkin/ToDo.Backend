@@ -13,7 +13,7 @@ using ToDo.Application.TaskItems.Queries.GetTaskItemDetails;
 using ToDo.Application.TaskItems.Queries.GetTaskItemList;
 using ToDo.WebApi.Models.TaskItems;
 
-namespace ToDo.WebApi.Controllers
+namespace ToDo.WebApi.Controllers 
 {
     /// <summary>
     /// Контроллер задач.
@@ -106,6 +106,57 @@ namespace ToDo.WebApi.Controllers
             return Ok(vm);
         }
 
+
+        /// <summary xml:lang="en">
+        /// Get task items for the calendar view within the specified date range.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Получить элементы задач для календаря в заданном диапазоне дат.
+        /// </summary>
+        /// <remarks xml:lang="en">
+        /// Sample request:
+        /// GET api/taskitems/calendar?start=2025-05-01T00:00:00+02:00&amp;end=2025-05-31T23:59:59+02:00
+        /// </remarks>
+        /// <param name="start" xml:lang="en">
+        /// The inclusive start date/time of the range to retrieve calendar items for.
+        /// </param>
+        /// <param name="start" xml:lang="ru">
+        /// Включающая начальная дата/время диапазона для получения элементов календаря.
+        /// </param>
+        /// <param name="end" xml:lang="en">
+        /// The inclusive end date/time of the range to retrieve calendar items for.
+        /// </param>
+        /// <param name="end" xml:lang="ru">
+        /// Включающая конечная дата/время диапазона для получения элементов календаря.
+        /// </param>
+        /// <returns xml:lang="en">
+        /// Returns a CalendarTaskItemsVm containing task items mapped for calendar display.
+        /// </returns>
+        /// <returns xml:lang="ru">
+        /// Возвращает объект CalendarTaskItemsVm с элементами задач для отображения в календаре.
+        /// </returns>
+        /// <response code="200" xml:lang="en">Success.</response>
+        /// <response code="200" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<CalendarTaskItemsVm>> Calendar(
+            [FromQuery] DateTimeOffset start,
+            [FromQuery] DateTimeOffset end)
+        {
+            var query = new GetCalendarTaskItemQuery
+            {
+                UserId = UserId,
+                StartDate = start,
+                EndDate = end
+            };
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
         /// <summary xml:lang="en">
         /// Creates a new task item.
         /// </summary>
@@ -147,6 +198,70 @@ namespace ToDo.WebApi.Controllers
 
             var taskItemId = await Mediator.Send(command);
             return Ok(taskItemId);
+        }
+
+
+        /// <summary xml:lang="en">
+        /// Marks the task item as completed.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Отмечает элемент задачи как выполненный.
+        /// </summary>
+        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
+        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
+        /// <response code="204" xml:lang="en">No Content.</response>
+        /// <response code="204" xml:lang="ru">Не возвращает содержимого.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
+        /// <remarks>
+        /// Sample request:
+        /// POST api/taskitems/complete/{id}
+        /// </remarks>
+        [HttpPost("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Complete(Guid id)
+        {
+            var command = new CompleteTaskItemCommand
+            {
+                Id = id,
+                UserId = UserId
+            };
+
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary xml:lang="en">
+        /// Reopens a completed task item, resetting its status to Todo.
+        /// </summary>
+        /// <summary xml:lang="ru">
+        /// Снимает отметку о выполнении задачи и переводит её в статус Todo.
+        /// </summary>
+        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
+        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
+        /// <response code="204" xml:lang="en">No Content.</response>
+        /// <response code="204" xml:lang="ru">Не возвращает содержимого.</response>
+        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
+        /// <remarks>
+        /// Sample request:
+        /// POST api/taskitems/reopen/{id}
+        /// </remarks>
+        [HttpPost("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Reopen(Guid id)
+        {
+            var command = new ReopenTaskItemCommand
+            {
+                Id = id,
+                UserId = UserId
+            };
+            await Mediator.Send(command);
+            return NoContent();
         }
 
         /// <summary xml:lang="en">
@@ -231,70 +346,6 @@ namespace ToDo.WebApi.Controllers
         }
 
 
-        /// <summary xml:lang="en">
-        /// Marks the task item as completed.
-        /// </summary>
-        /// <summary xml:lang="ru">
-        /// Отмечает элемент задачи как выполненный.
-        /// </summary>
-        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
-        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
-        /// <response code="204" xml:lang="en">No Content.</response>
-        /// <response code="204" xml:lang="ru">Не возвращает содержимого.</response>
-        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
-        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
-        /// <remarks>
-        /// Sample request:
-        /// POST api/taskitems/complete/{id}
-        /// </remarks>
-        [HttpPost("{id}")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Complete(Guid id)
-        {
-            var command = new CompleteTaskItemCommand
-            {
-                Id = id,
-                UserId = UserId
-            };
-
-            await Mediator.Send(command);
-            return NoContent();
-        }
-
-
-
-        /// <summary xml:lang="en">
-        /// Reopens a completed task item, resetting its status to Todo.
-        /// </summary>
-        /// <summary xml:lang="ru">
-        /// Снимает отметку о выполнении задачи и переводит её в статус Todo.
-        /// </summary>
-        /// <param name="id" xml:lang="en">Task item id (GUID).</param>
-        /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
-        /// <response code="204" xml:lang="en">No Content.</response>
-        /// <response code="204" xml:lang="ru">Не возвращает содержимого.</response>
-        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
-        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
-        /// <remarks>
-        /// Sample request:
-        /// POST api/taskitems/reopen/{id}
-        /// </remarks>
-        [HttpPost("{id}")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Reopen(Guid id)
-        {
-            var command = new ReopenTaskItemCommand
-            {
-                Id = id,
-                UserId = UserId
-            };
-            await Mediator.Send(command);
-            return NoContent();
-        }
 
         /// <summary xml:lang="en">
         /// Deletes the task item by id.
@@ -331,58 +382,5 @@ namespace ToDo.WebApi.Controllers
 
 
 
-        /// <summary xml:lang="en">
-        /// Get task items for the calendar view within the specified date range.
-        /// </summary>
-        /// <summary xml:lang="ru">
-        /// Получить элементы задач для календаря в заданном диапазоне дат.
-        /// </summary>
-        /// <remarks xml:lang="en">
-        /// Sample request:
-        /// GET api/taskitems/calendar?start=2025-05-01T00:00:00+02:00&amp;end=2025-05-31T23:59:59+02:00
-        /// </remarks>
-        /// <remarks xml:lang="ru">
-        /// Пример запроса:
-        /// GET api/taskitems/calendar?start=2025-05-01T00:00:00+02:00&amp;end=2025-05-31T23:59:59+02:00
-        /// </remarks>
-        /// <param name="start" xml:lang="en">
-        /// The inclusive start date/time of the range to retrieve calendar items for.
-        /// </param>
-        /// <param name="start" xml:lang="ru">
-        /// Включающая начальная дата/время диапазона для получения элементов календаря.
-        /// </param>
-        /// <param name="end" xml:lang="en">
-        /// The inclusive end date/time of the range to retrieve calendar items for.
-        /// </param>
-        /// <param name="end" xml:lang="ru">
-        /// Включающая конечная дата/время диапазона для получения элементов календаря.
-        /// </param>
-        /// <returns xml:lang="en">
-        /// Returns a CalendarTaskItemsVm containing task items mapped for calendar display.
-        /// </returns>
-        /// <returns xml:lang="ru">
-        /// Возвращает объект CalendarTaskItemsVm с элементами задач для отображения в календаре.
-        /// </returns>
-        /// <response code="200" xml:lang="en">Success.</response>
-        /// <response code="200" xml:lang="ru">Успешно.</response>
-        /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
-        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
-        [HttpGet]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<CalendarTaskItemsVm>> Calendar(
-            [FromQuery] DateTimeOffset start,
-            [FromQuery] DateTimeOffset end)
-        {
-            var query = new GetCalendarTaskItemQuery
-            {
-                UserId = UserId,
-                StartDate = start,
-                EndDate = end
-            };
-            var result = await Mediator.Send(query);
-            return Ok(result);
-        }
     }
 }

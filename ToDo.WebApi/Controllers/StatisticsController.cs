@@ -48,7 +48,7 @@ namespace ToDo.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<TaskStatisticsVm>> GetGloabal()
+        public async Task<ActionResult<TaskStatisticsVm>> GetGlobal()
         {
             var query = new GetTaskStatisticsQuery
             {

@@ -1,10 +1,13 @@
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using ToDo.Application;
 using ToDo.Application.Common.Mapping;
 using ToDo.Persistance;
 using ToDo.WebApi.Middleware;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.AspNetCore.Builder;
+using ToDo.WebApi.Swagger;
+using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
+using Unchase.Swashbuckle.AspNetCore.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,18 +26,7 @@ builder.Services.AddPersistance(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 
-builder.Services.AddSwaggerGen(config =>
-{
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    config.IncludeXmlComments(xmlPath);
-
-    var xmlDomain = Path.Combine(AppContext.BaseDirectory, "ToDo.Domain.xml");
-    config.IncludeXmlComments(xmlDomain);
-
-    var xmlApplication = Path.Combine(AppContext.BaseDirectory, "ToDo.Application.xml");
-    config.IncludeXmlComments(xmlApplication);
-});
+builder.Services.AddSwaggerServices();
 
 var app = builder.Build();
 
