@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ToDo.Application.Statistics.Queries
+namespace ToDo.Application.Statistics.Queries.GlobalTaskStatistics
 {
     public class GetTaskStatisticsQuery : IRequest<TaskStatisticsVm>
     {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Interfaces;
 using ToDo.Domain.Enums;
 
-namespace ToDo.Application.Statistics.Queries
+namespace ToDo.Application.Statistics.Queries.GlobalTaskStatistics
 {
     public class GetTaskStatisticsQueryHandler
         : IRequestHandler<GetTaskStatisticsQuery, TaskStatisticsVm>

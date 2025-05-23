@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ToDo.Domain.Enums;
 
-namespace ToDo.Application.Statistics.Queries
+namespace ToDo.Application.Statistics.Queries.GlobalTaskStatistics
 {
     /// <summary>
     /// Сводная статистика по задачам пользователя.
