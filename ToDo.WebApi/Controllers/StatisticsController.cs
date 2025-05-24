@@ -81,12 +81,12 @@ namespace ToDo.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<DailyTaskStatisticsVm>> GetDaily(
-            [FromQuery] int days = 7)
+            [FromQuery] int Days = 7)
         {
             var query = new GetDailyTaskStatisticsQuery
             {
                 UserId = UserId,
-                Days = days
+                Days = Days
             };
 
             var results = await Mediator.Send(query);

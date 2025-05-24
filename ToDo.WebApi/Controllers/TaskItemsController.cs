@@ -179,13 +179,13 @@ namespace ToDo.WebApi.Controllers
         /// <param name="createTaskItemDto" xml:lang="ru">Объект CreateTaskItemDto.</param>
         /// <returns xml:lang="en">Returns id (GUID).</returns>
         /// <returns xml:lang="ru">Возвращает идентификатор (GUID).</returns>
-        /// <response code="200" xml:lang="en">Success.</response>
-        /// <response code="200" xml:lang="ru">Успешно.</response>
+        /// <response code="201" xml:lang="en">Success creation the task.</response>
+        /// <response code="201" xml:lang="ru">Успешное создание задачи.</response>
         /// <response code="401" xml:lang="en">If the user is unauthorized.</response>
         /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateTaskItemDto createTaskItemDto)
         {
@@ -193,7 +193,10 @@ namespace ToDo.WebApi.Controllers
             command.UserId = UserId;
 
             var taskItemId = await Mediator.Send(command);
-            return Ok(taskItemId);
+            return CreatedAtAction(
+                nameof(Get),
+                new {id =  taskItemId},
+                taskItemId);
         }
 
 
