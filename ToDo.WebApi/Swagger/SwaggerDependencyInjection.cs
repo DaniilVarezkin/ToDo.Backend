@@ -11,6 +11,19 @@ namespace ToDo.WebApi.Swagger
         {
             services.AddSwaggerGen(config =>
             {
+                config.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "ToDo API",
+                    Version = "1.0",
+                    Description = "API для управления задачами: регистрация, JWT-аутентификация, CRUD и статистика.",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Почта",
+                        Email = "daniil.varezkin@gmail.com"
+                    }
+                });
+
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 config.IncludeXmlComments(xmlPath);
@@ -28,6 +41,7 @@ namespace ToDo.WebApi.Swagger
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
                     BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
                     Description = "Введите JWT"
                 });
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Text.Json;
 using ToDo.Application.Common.Exceptions;
 
 namespace ToDo.WebApi.Middleware
@@ -27,28 +27,53 @@ namespace ToDo.WebApi.Middleware
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
-            var result = string.Empty;
+            ProblemDetails problemDetails;
 
             switch (exception)
             {
                 case ValidationException validationException:
                     code = HttpStatusCode.BadRequest;
-                    result = JsonSerializer.Serialize(validationException.Errors);
+                    var errors = validationException.Errors
+                        .GroupBy(error => error.PropertyName)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.Select(e => e.ErrorMessage).ToArray()
+                        );
+                    problemDetails = new ValidationProblemDetails(errors)
+                    {
+                        Status = (int)code,
+                        Title = "Validation Failed",
+                        Instance = context.Request.Path
+                    };
                     break;
                 case NotFoundException notFoundExceptions:
                     code = HttpStatusCode.NotFound;
+                    problemDetails = new ProblemDetails
+                    {
+                        Type = "https://httpstatuses.com/404",
+                        Title = "Resource Not Found",
+                        Status = (int)code,
+                        Detail = notFoundExceptions.Message,
+                        Instance = context.Request.Path
+                    };
+                    break;
+                default:
+                    code = HttpStatusCode.InternalServerError;
+                    problemDetails = new ProblemDetails
+                    {
+                        Type = "https://httpstatuses.com/500",
+                        Title = "Internal Server Error",
+                        Status = (int)code,
+                        Detail = "An unexpected error occurred.",
+                        Instance = context.Request.Path
+                    };
                     break;
             }
 
-            context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
+            context.Response.ContentType = "application/problem+json";
 
-            if(result == string.Empty)
-            {
-                result = JsonSerializer.Serialize(new {error = exception.Message});
-            }
-
-            return context.Response.WriteAsync(result);
+            return context.Response.WriteAsJsonAsync(problemDetails, problemDetails.GetType(), context.RequestAborted);
         }
     }
 }
