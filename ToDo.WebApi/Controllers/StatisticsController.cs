@@ -11,7 +11,7 @@ namespace ToDo.WebApi.Controllers
     /// </summary>
     [Authorize]
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/statistics/[action]")]
     public class StatisticsController : BaseController
     {
         private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ namespace ToDo.WebApi.Controllers
         /// Получает общую статистику по задачам пользователя.
         /// </summary>
         /// <remarks xml:lang="en">
-        /// пример запроса:
+        /// Пример запроса:
         /// GET api/statistics/getglobal
         /// </remarks>
         /// <returns xml:lang="ru">Возвращает <see cref="TaskStatisticsVm"/>.</returns>
@@ -50,7 +50,7 @@ namespace ToDo.WebApi.Controllers
         /// Получает ежедневную статистику завершения задач за указанный период.
         /// </summary>
         /// <remarks xml:lang="en">
-        /// пример запроса:
+        /// Пример запроса:
         /// GET api/statistics/getdaily?days=7
         /// </remarks>
         /// <param name="Days" xml:lang="ru">Количество дней для статистики (по умолчанию 7).</param>

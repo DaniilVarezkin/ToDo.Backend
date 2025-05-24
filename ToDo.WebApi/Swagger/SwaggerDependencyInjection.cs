@@ -48,6 +48,8 @@ namespace ToDo.WebApi.Swagger
                 //Добавляем авторизацию только на методы с атрибутом [Authorize]
                 config.OperationFilter<AuthorizeCheckOperationFilter>();
 
+                config.OperationFilter<RequestBodyOperationFilter>();
+
                 //Добавления описания к перечислениям
                 config.AddEnumsWithValuesFixFilters(opt =>
                 {

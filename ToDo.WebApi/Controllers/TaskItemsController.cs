@@ -23,7 +23,7 @@ namespace ToDo.WebApi.Controllers
     /// задач текущего авторизованного пользователя.
     /// </remarks>
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/task-items/[action]")]
     public class TaskItemsController : BaseController
     {
         public readonly IMapper _mapper;
@@ -33,7 +33,7 @@ namespace ToDo.WebApi.Controllers
         /// Получить список элементов задач с фильтрацией, сортировкой и пагинацией.
         /// </summary>
         /// <remarks xml:lang="en">
-        /// пример запроса:
+        /// Пример запроса:
         /// GET api/taskitems?page=1&amp;pageSize=10&amp;status=Done&amp;priority=High&amp;search=meeting
         /// </remarks>
         /// <param name="queryDto" xml:lang="ru">
@@ -61,7 +61,7 @@ namespace ToDo.WebApi.Controllers
         /// Получить элемент задачи по идентификатору.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// GET api/taskitems/{id}
         /// </remarks>
         /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
@@ -89,7 +89,7 @@ namespace ToDo.WebApi.Controllers
         /// Получить элементы задач для календаря в заданном диапазоне дат.
         /// </summary>
         /// <remarks xml:lang="en">
-        /// пример запроса:
+        /// Пример запроса:
         /// GET api/taskitems/calendar?start=2025-05-01T00:00:00+02:00&amp;end=2025-05-31T23:59:59+02:00
         /// </remarks>
         /// <param name="start" xml:lang="ru">
@@ -127,7 +127,7 @@ namespace ToDo.WebApi.Controllers
         /// Создает новый элемент задачи.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// POST api/taskitems
         /// {
         ///     "title": "Task title",
@@ -168,7 +168,7 @@ namespace ToDo.WebApi.Controllers
         /// Отмечает элемент задачи как выполненный.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// POST api/taskitems/complete/{id}
         /// </remarks>
         /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
@@ -196,7 +196,7 @@ namespace ToDo.WebApi.Controllers
         /// Снимает отметку о выполнении задачи и переводит её в статус Todo.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// POST api/taskitems/reopen/{id}
         /// </remarks>
         /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>
@@ -223,7 +223,7 @@ namespace ToDo.WebApi.Controllers
         /// Обновляет существующий элемент задачи.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// PUT api/taskitems
         /// {
         ///     "id": "FFC6D4FB-45D0-4B5A-BC56-8450A36C5547",
@@ -264,7 +264,7 @@ namespace ToDo.WebApi.Controllers
         /// Частично обновляет элемент задачи.
         /// </summary>
         /// <remarks xml:lang="en">
-        /// пример запроса:
+        /// Пример запроса:
         /// PATCH api/taskitems/partialupdate
         /// {
         ///     "id": "F091F1EC-ED13-4D2D-BF4A-E340403D9531",
@@ -296,7 +296,7 @@ namespace ToDo.WebApi.Controllers
         /// Удаляет элемент задачи по идентификатору.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// DELETE api/taskitems/{id}
         /// </remarks>
         /// <param name="id" xml:lang="ru">Идентификатор элемента задачи (GUID).</param>

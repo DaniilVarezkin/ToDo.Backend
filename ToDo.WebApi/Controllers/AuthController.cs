@@ -8,7 +8,7 @@ using ToDo.WebApi.Models.Auth;
 namespace ToDo.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/auth/[action]")]
     public class AuthController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -26,7 +26,7 @@ namespace ToDo.WebApi.Controllers
         /// Регистрирует нового пользователя.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// POST api/auth/register
         /// {
         ///     "userName": "username",
@@ -70,7 +70,7 @@ namespace ToDo.WebApi.Controllers
         /// Аутентифицирует пользователя и возвращает JWT-токен.
         /// </summary>
         /// <remarks>
-        /// пример запроса:
+        /// Пример запроса:
         /// POST api/auth/login
         /// {
         ///     "email": "user@example.com",
