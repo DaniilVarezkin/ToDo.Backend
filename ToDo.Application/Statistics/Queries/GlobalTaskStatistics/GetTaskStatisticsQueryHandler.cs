@@ -1,18 +1,19 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Interfaces;
+using ToDo.Shared.Dto.Statistics;
 using ToDo.Shared.Enums;
 
 namespace ToDo.Application.Statistics.Queries.GlobalTaskStatistics
 {
     public class GetTaskStatisticsQueryHandler
-        : IRequestHandler<GetTaskStatisticsQuery, TaskStatisticsVm>
+        : IRequestHandler<GetTaskStatisticsQuery, GlobalTaskStatisticsVm>
     {
         private readonly IAppDbContext _dbContext;
         public GetTaskStatisticsQueryHandler(IAppDbContext dbContext) =>
             _dbContext = dbContext;
 
-        public async Task<TaskStatisticsVm> Handle(GetTaskStatisticsQuery request, CancellationToken cancellationToken)
+        public async Task<GlobalTaskStatisticsVm> Handle(GetTaskStatisticsQuery request, CancellationToken cancellationToken)
         {
             var userTasks = _dbContext.TaskItems
                 .Where(taskItem => taskItem.UserId == request.UserId);
@@ -43,7 +44,7 @@ namespace ToDo.Application.Statistics.Queries.GlobalTaskStatistics
             cancellationToken);
 
 
-            return new TaskStatisticsVm
+            return new GlobalTaskStatisticsVm
             {
                 TotalCount = totalCount,
                 ByStatus = byStatus,

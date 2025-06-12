@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using ToDo.Application.TaskItems.Queries.Common;
+using ToDo.Shared.Dto.Common;
+using ToDo.Shared.Dto.TaskItems;
 using ToDo.Shared.Enums;
 
 namespace ToDo.Application.TaskItems.Queries.GetTaskItemList

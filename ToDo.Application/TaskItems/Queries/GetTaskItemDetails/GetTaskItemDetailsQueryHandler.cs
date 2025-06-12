@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Common.Exceptions;
 using ToDo.Application.Interfaces;
 using ToDo.Domain.Models;
+using ToDo.Shared.Dto.TaskItems;
 
 namespace ToDo.Application.TaskItems.Queries.GetTaskItemDetails
 {

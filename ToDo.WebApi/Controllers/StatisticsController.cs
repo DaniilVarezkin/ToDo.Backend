@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Application.Statistics.Queries.DailyTaskStatistics;
 using ToDo.Application.Statistics.Queries.GlobalTaskStatistics;
+using ToDo.Shared.Dto.Statistics;
 
 namespace ToDo.WebApi.Controllers
 {
@@ -33,7 +34,7 @@ namespace ToDo.WebApi.Controllers
         /// <response code="200" xml:lang="ru">Успешно.</response>
         /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(TaskStatisticsVm),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(TaskStatisticsVm), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<TaskStatisticsVm>> GetGlobal()
         {

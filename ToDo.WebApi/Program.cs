@@ -1,8 +1,8 @@
 using System.Reflection;
 using ToDo.Application;
 using ToDo.Application.Common.Mapping;
+using ToDo.Application.Common.Mapping.MappingProfiles;
 using ToDo.Persistance;
-using ToDo.WebApi.MappingProfiles;
 using ToDo.WebApi.Middleware;
 using ToDo.WebApi.Swagger;
 

@@ -10,12 +10,12 @@ namespace ToDo.Application.Common.Mapping
 
         private void ApplyMappingFromAssembly(Assembly assembly)
         {
-            var types = assembly.GetExportedTypes()
+            var typesIMapped = assembly.GetExportedTypes()
                 .Where(type => type.GetInterfaces()
                     .Any(i => i == typeof(IMapped)))
                 .ToList();
 
-            foreach (var type in types)
+            foreach (var type in typesIMapped)
             {
                 var instance = Activator.CreateInstance(type);
                 var methodInfo = type.GetMethod("ConfigureMapping");

@@ -3,7 +3,8 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Interfaces;
-using ToDo.Application.TaskItems.Queries.Common;
+using ToDo.Shared.Dto.Common;
+using ToDo.Shared.Dto.TaskItems;
 
 namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
 {
@@ -35,7 +36,7 @@ namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
                 baseQuery = baseQuery.Where(taskItem =>
-                    taskItem.Title.Contains(request.Search) || 
+                    taskItem.Title.Contains(request.Search) ||
                     (taskItem.Description ?? "").Contains(request.Search));
             }
 
@@ -66,8 +67,8 @@ namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
                 .ToListAsync(cancellationToken);
 
 
-            return new PagedResult<TaskItemLookupDto> 
-            { 
+            return new PagedResult<TaskItemLookupDto>
+            {
                 Page = request.Page,
                 PageSize = request.PageSize,
                 TotalCount = totalCount,

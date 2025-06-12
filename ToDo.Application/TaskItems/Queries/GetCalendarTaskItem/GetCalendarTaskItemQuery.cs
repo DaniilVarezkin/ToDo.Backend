@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using ToDo.Shared.Dto.TaskItems;
 
 namespace ToDo.Application.TaskItems.Queries.GetCalendarTaskItem
 {

@@ -2,8 +2,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Interfaces;
-using ToDo.Application.TaskItems.Queries.Common;
 using ToDo.Domain.Models;
+using ToDo.Shared.Dto.Common;
+using ToDo.Shared.Dto.TaskItems;
 
 namespace ToDo.Application.TaskItems.Queries.GetCalendarTaskItem
 {

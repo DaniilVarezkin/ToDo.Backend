@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Interfaces;
+using ToDo.Shared.Dto.Statistics;
 using ToDo.Shared.Enums;
 
 namespace ToDo.Application.Statistics.Queries.DailyTaskStatistics
