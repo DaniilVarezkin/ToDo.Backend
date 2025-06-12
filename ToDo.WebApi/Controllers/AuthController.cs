@@ -99,7 +99,7 @@ namespace ToDo.WebApi.Controllers
                 return Unauthorized(new ProblemDetails { Title = "Invalid username or password." });
 
             var token = _jwtService.GenerateJwtToken(user);
-            return Ok(new { token });
+            return Ok(new LoginResponse { Token = token });
         }
     }
 }

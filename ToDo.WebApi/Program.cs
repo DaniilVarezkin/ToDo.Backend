@@ -8,6 +8,9 @@ using ToDo.WebApi.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(config =>
@@ -36,6 +39,8 @@ builder.Services.AddCors(config =>
     });
 });
 
+builder.Services.AddHttpLogging(o => { });
+
 var app = builder.Build();
 
 //Инициализация БД
@@ -52,6 +57,8 @@ using (var scope = app.Services.CreateScope())
         throw ex;
     }
 }
+
+app.UseHttpLogging();
 
 app.UseCustomExceptionHandler();
 app.UseHttpsRedirection();
@@ -72,5 +79,7 @@ app.UseSwaggerUI(cfg =>
     cfg.RoutePrefix = string.Empty;
     cfg.SwaggerEndpoint("swagger/v1/swagger.json", "ToDo API");
 });
+
+
 
 app.Run();

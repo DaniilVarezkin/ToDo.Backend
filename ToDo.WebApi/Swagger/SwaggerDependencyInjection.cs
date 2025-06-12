@@ -34,6 +34,9 @@ namespace ToDo.WebApi.Swagger
                 var xmlApplication = Path.Combine(AppContext.BaseDirectory, "ToDo.Application.xml");
                 config.IncludeXmlComments(xmlApplication);
 
+                var xmlShared = Path.Combine(AppContext.BaseDirectory, "ToDo.Shared.xml");
+                config.IncludeXmlComments(xmlShared);
+
 
                 // Описание схемы Bearer
                 config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -54,6 +57,7 @@ namespace ToDo.WebApi.Swagger
                 config.AddEnumsWithValuesFixFilters(opt =>
                 {
                     opt.IncludeXmlCommentsFrom(xmlDomain);
+                    opt.IncludeXmlCommentsFrom(xmlShared);
                     opt.DescriptionSource = DescriptionSources.XmlComments;
                     opt.IncludeDescriptions = true;
                 });
