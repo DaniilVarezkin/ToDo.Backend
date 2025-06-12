@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ToDo.Application.Common.Mapping;
-using ToDo.Domain.Enums;
 using ToDo.Domain.Models;
+using ToDo.Shared.Enums;
 
 namespace ToDo.Application.TaskItems.Queries.Common
 {

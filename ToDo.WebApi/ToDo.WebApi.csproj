@@ -28,6 +28,7 @@
     <ProjectReference Include="..\ToDo.Application\ToDo.Application.csproj" />
     <ProjectReference Include="..\ToDo.Domain\ToDo.Domain.csproj" />
     <ProjectReference Include="..\ToDo.Persistance\ToDo.Persistance.csproj" />
+	<ProjectReference Include="..\..\ToDo.Shared\ToDo.Shared\ToDo.Shared.csproj" />
   </ItemGroup>
 
 </Project>

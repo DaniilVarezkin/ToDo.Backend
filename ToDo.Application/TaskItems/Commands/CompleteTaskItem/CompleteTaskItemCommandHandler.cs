@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Interfaces;
 using ToDo.Application.Common.Exceptions;
 using ToDo.Domain.Models;
-using ToDo.Domain.Enums;
+using ToDo.Shared.Enums;
 
 namespace ToDo.Application.TaskItems.Commands.CompleteTaskItem
 {

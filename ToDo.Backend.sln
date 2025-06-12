@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Persistance", "ToDo.Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.WebApi", "ToDo.WebApi\ToDo.WebApi.csproj", "{56FF6279-CD25-44DA-AA91-96920D3D9AD2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Shared", "..\ToDo.Shared\ToDo.Shared\ToDo.Shared.csproj", "{9DFDF12A-B67D-96D9-D4A7-31BF400AF114}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{56FF6279-CD25-44DA-AA91-96920D3D9AD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56FF6279-CD25-44DA-AA91-96920D3D9AD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56FF6279-CD25-44DA-AA91-96920D3D9AD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DFDF12A-B67D-96D9-D4A7-31BF400AF114}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DFDF12A-B67D-96D9-D4A7-31BF400AF114}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DFDF12A-B67D-96D9-D4A7-31BF400AF114}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DFDF12A-B67D-96D9-D4A7-31BF400AF114}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

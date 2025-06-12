@@ -11,7 +11,7 @@ using ToDo.Application.TaskItems.Queries.Common;
 using ToDo.Application.TaskItems.Queries.GetCalendarTaskItem;
 using ToDo.Application.TaskItems.Queries.GetTaskItemDetails;
 using ToDo.Application.TaskItems.Queries.GetTaskItemList;
-using ToDo.WebApi.Models.TaskItems;
+using ToDo.Shared.Dto.TaskItems;
 
 namespace ToDo.WebApi.Controllers
 {

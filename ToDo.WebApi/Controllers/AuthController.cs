@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Persistance.Identity;
 using ToDo.Persistance.Services;
-using ToDo.WebApi.Models.Auth;
+using ToDo.Shared.Dto.Auth;
 
 namespace ToDo.WebApi.Controllers
 {

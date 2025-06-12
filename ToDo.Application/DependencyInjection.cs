@@ -19,14 +19,14 @@ namespace ToDo.Application
         public static IServiceCollection AddApplication(
             this IServiceCollection services)
         {
-            // Регистрация MediatR: сканирование текущей сборки на запросы и обработчики
+
             services.AddMediatR(config =>
                 config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
-            // Регистрация валидаторов FluentValidation из текущей сборки
+
             services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
-            // Добавление поведения конвейера для валидации запросов
+
             services.AddTransient(
                 typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 

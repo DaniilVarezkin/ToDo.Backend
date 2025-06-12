@@ -1,19 +1,13 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ToDo.Application.Common.Exceptions;
 using ToDo.Application.Interfaces;
-using ToDo.Application.TaskItems.Commands.CompleteTaskItem;
-using ToDo.Domain.Enums;
 using ToDo.Domain.Models;
+using ToDo.Shared.Enums;
 
 namespace ToDo.Application.TaskItems.Commands.ReopenTaskItem
 {
-    public class ReopenTaskItemCommandHandler 
+    public class ReopenTaskItemCommandHandler
         : IRequestHandler<ReopenTaskItemCommand>
     {
         private readonly IAppDbContext _dbContext;

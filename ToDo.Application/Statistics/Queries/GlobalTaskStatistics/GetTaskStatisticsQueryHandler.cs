@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Interfaces;
-using ToDo.Domain.Enums;
+using ToDo.Shared.Enums;
 
 namespace ToDo.Application.Statistics.Queries.GlobalTaskStatistics
 {

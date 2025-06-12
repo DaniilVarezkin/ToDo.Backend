@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
-using ToDo.Domain.Enums;
-using ToDo.Domain.Models;
+using ToDo.Shared.Enums;
 
 namespace ToDo.Application.TaskItems.Commands.PartialUpdateTaskItem
 {

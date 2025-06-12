@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ToDo.Application.Common.Mapping;
-using ToDo.Domain.Enums;
 using ToDo.Domain.Models;
+using ToDo.Shared.Enums;
 
 namespace ToDo.Application.TaskItems.Queries.GetTaskItemDetails
 {

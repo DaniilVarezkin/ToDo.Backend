@@ -1,13 +1,10 @@
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 using System.Reflection;
 using ToDo.Application;
 using ToDo.Application.Common.Mapping;
 using ToDo.Persistance;
+using ToDo.WebApi.MappingProfiles;
 using ToDo.WebApi.Middleware;
 using ToDo.WebApi.Swagger;
-using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
-using Unchase.Swashbuckle.AspNetCore.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +14,7 @@ builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
     config.AddProfile(new AssemblyMappingProfile(typeof(IMapped).Assembly));
+    config.AddProfile(new TaskItemMappingProfile());
 });
 
 builder.Services.AddApplication();
@@ -27,6 +25,16 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAuthorization();
 
 builder.Services.AddSwaggerServices();
+
+builder.Services.AddCors(config =>
+{
+    config.AddPolicy("default", options =>
+    {
+        options.AllowAnyHeader();
+        options.AllowAnyMethod();
+        options.AllowAnyOrigin();
+    });
+});
 
 var app = builder.Build();
 
@@ -49,7 +57,7 @@ app.UseCustomExceptionHandler();
 app.UseHttpsRedirection();
 app.UseRouting();
 
-//Добавить CORS
+app.UseCors("default");
 
 app.UseStaticFiles();
 
