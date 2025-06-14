@@ -20,30 +20,38 @@ namespace ToDo.Application.TaskItems.Queries.GetCalendarTaskItem
 
         public async Task<CalendarTaskItemsVm> Handle(GetCalendarTaskItemQuery request, CancellationToken cancellationToken)
         {
+            // 1. Приводим границы к UTC+0
+            var startUtc = new DateTimeOffset(request.StartDate.UtcDateTime, TimeSpan.Zero);
+            var endUtc = new DateTimeOffset(request.EndDate.UtcDateTime, TimeSpan.Zero);
+
+            // 2. Фильтруем по этим новым интервалам
             var tasks = await _dbContext.TaskItems
                 .Where(x => x.UserId == request.UserId
-                         && x.StartDate <= request.EndDate
-                         && x.EndDate >= request.StartDate)
+                         && x.StartDate <= endUtc
+                         && x.EndDate >= startUtc)
                 .ToListAsync(cancellationToken);
 
+            // 3. Строим список дней, тоже в UTC+0
             var days = tasks
               .SelectMany(task =>
               {
-                  var from = task.StartDate.Date;
-                  var to = task.EndDate.Date;
-                  var list = new List<(DateTimeOffset date, TaskItem task)>();
-                  for (var day = from; day <= to; day = day.AddDays(1))
-                      list.Add((day, task));
-                  return list;
+                  // получаем диапазон дат в UTC
+                  var fromDate = task.StartDate.UtcDateTime.Date;
+                  var toDate = task.EndDate.UtcDateTime.Date;
+                  return Enumerable.Range(0, (toDate - fromDate).Days + 1)
+                      .Select(offset => new
+                      {
+                          // каждый день помечаем явно как UTC+0
+                          Date = new DateTimeOffset(fromDate.AddDays(offset), TimeSpan.Zero),
+                          Task = task
+                      });
               })
-              .GroupBy(pair => pair.date)
-              .OrderBy(group => group.Key)
-              .Select(group => new CalendarDay
+              .GroupBy(x => x.Date)
+              .OrderBy(g => g.Key)
+              .Select(g => new CalendarDay
               {
-                  Date = group.Key,
-                  Tasks = group
-                    .Select(pair => _mapper.Map<TaskItemLookupDto>(pair.task))
-                    .ToList()
+                  Date = g.Key,
+                  Tasks = g.Select(x => _mapper.Map<TaskItemLookupDto>(x.Task)).ToList()
               })
               .ToList();
 

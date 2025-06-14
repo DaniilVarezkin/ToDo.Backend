@@ -29,9 +29,15 @@ namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
             if (request.Priority.HasValue)
                 baseQuery = baseQuery.Where(taskItem => taskItem.Priority == request.Priority.Value);
             if (request.DateFrom.HasValue)
-                baseQuery = baseQuery.Where(taskItem => taskItem.StartDate >= request.DateFrom.Value);
+            {
+                var startUtc = new DateTimeOffset(request.DateFrom.Value.UtcDateTime, TimeSpan.Zero);
+                baseQuery = baseQuery.Where(taskItem => taskItem.StartDate >= startUtc);
+            }
             if (request.DateTo.HasValue)
-                baseQuery = baseQuery.Where(taskItem => taskItem.EndDate <= request.DateTo.Value);
+            {
+                var endUtc = new DateTimeOffset(request.DateTo.Value.UtcDateTime, TimeSpan.Zero);
+                baseQuery = baseQuery.Where(taskItem => taskItem.EndDate <= endUtc);
+            }
 
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
@@ -45,6 +51,9 @@ namespace ToDo.Application.TaskItems.Queries.GetTaskItemList
 
             baseQuery = (request.SortBy?.ToLower()) switch
             {
+                "title" => request.SortDescending
+                                    ? baseQuery.OrderByDescending(taskItem => taskItem.Title)
+                                    : baseQuery.OrderBy(taskItem => taskItem.Title),
                 "priority" => request.SortDescending
                                     ? baseQuery.OrderByDescending(taskItem => taskItem.Priority)
                                     : baseQuery.OrderBy(taskItem => taskItem.Priority),
