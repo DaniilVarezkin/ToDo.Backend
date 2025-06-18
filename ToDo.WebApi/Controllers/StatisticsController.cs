@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Application.Statistics.Queries.DailyTaskStatistics;
+using ToDo.Application.Statistics.Queries.GetStatusHistory;
 using ToDo.Application.Statistics.Queries.GlobalTaskStatistics;
 using ToDo.Shared.Dto.Statistics;
 
@@ -72,6 +73,33 @@ namespace ToDo.WebApi.Controllers
 
             var results = await Mediator.Send(query);
             return Ok(results);
+        }
+
+
+        /// <summary xml:lang="ru">
+        /// Получает историю количества завершённых задач по каждому статусу за указанный период.
+        /// </summary>
+        /// <remarks xml:lang="en">
+        /// Пример запроса:
+        /// GET api/statistics/getstatushistory?days=7
+        /// </remarks>
+        /// <param name="Days" xml:lang="ru">Количество дней для истории (по умолчанию 7).</param>
+        /// <returns xml:lang="ru">Возвращает <see cref="TaskStatusHistoryVm"/>.</returns>
+        /// <response code="200" xml:lang="ru">Успешно.</response>
+        /// <response code="401" xml:lang="ru">Если пользователь не авторизован.</response>
+        [HttpGet]
+        [ProducesResponseType(typeof(TaskStatusHistoryVm), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<TaskStatusHistoryVm>> GetStatusHistory(
+            [FromQuery] int Days = 7)
+        {
+            var query = new GetStatusHistoryQuery
+            {
+                UserId = UserId,
+                Days = Days
+            };
+            var result = await Mediator.Send(query);
+            return Ok(result);
         }
     }
 }

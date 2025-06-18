@@ -4,7 +4,6 @@ using ToDo.Shared.Enums;
 
 namespace ToDo.Application.TaskItems.Commands.CreateTaskItem
 {
-    // Команда создания задачи
     public class CreateTaskItemCommand : IRequest<Guid>
     {
         [Required]
