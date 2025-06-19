@@ -17,7 +17,6 @@ namespace ToDo.Application.TaskItems.Queries.GetCalendarTaskItem
         public GetCalendarTaskItemQueryHandler(IAppDbContext dbContext, IMapper mapper) =>
             (_dbContext, _mapper) = (dbContext, mapper);
 
-
         public async Task<CalendarTaskItemsVm> Handle(GetCalendarTaskItemQuery request, CancellationToken cancellationToken)
         {
             // 1. Приводим границы к UTC+0
@@ -31,29 +30,37 @@ namespace ToDo.Application.TaskItems.Queries.GetCalendarTaskItem
                          && x.EndDate >= startUtc)
                 .ToListAsync(cancellationToken);
 
-            // 3. Строим список дней, тоже в UTC+0
+            // 3. Строим список дней, корректно обрабатывая однодневные задачи
             var days = tasks
-              .SelectMany(task =>
-              {
-                  // получаем диапазон дат в UTC
-                  var fromDate = task.StartDate.UtcDateTime.Date;
-                  var toDate = task.EndDate.UtcDateTime.Date;
-                  return Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                      .Select(offset => new
-                      {
-                          // каждый день помечаем явно как UTC+0
-                          Date = new DateTimeOffset(fromDate.AddDays(offset), TimeSpan.Zero),
-                          Task = task
-                      });
-              })
-              .GroupBy(x => x.Date)
-              .OrderBy(g => g.Key)
-              .Select(g => new CalendarDay
-              {
-                  Date = g.Key,
-                  Tasks = g.Select(x => _mapper.Map<TaskItemLookupDto>(x.Task)).ToList()
-              })
-              .ToList();
+                .SelectMany(task =>
+                {
+                    var fromDate = task.StartDate.UtcDateTime.Date;
+
+                    var toDate = task.EndDate.UtcDateTime;
+                    if (toDate.TimeOfDay == TimeSpan.Zero)
+                        toDate = toDate.AddTicks(-1); // исключаем ровно полночь
+
+                    var toDateDate = toDate.Date;
+
+                    return Enumerable.Range(0, (toDateDate - fromDate).Days + 1)
+                        .Select(offset => new
+                        {
+                            Date = new DateTimeOffset(fromDate.AddDays(offset), TimeSpan.Zero),
+                            Task = task
+                        });
+                })
+                .GroupBy(x => x.Date)
+                .OrderBy(g => g.Key)
+                .Select(g => new CalendarDay
+                {
+                    Date = g.Key,
+                    Tasks = g
+                        .Select(x => x.Task)
+                        .OrderBy(t => t.StartDate) // правильная сортировка внутри дня
+                        .Select(task => _mapper.Map<TaskItemLookupDto>(task))
+                        .ToList()
+                })
+                .ToList();
 
             return new CalendarTaskItemsVm { Days = days };
         }
