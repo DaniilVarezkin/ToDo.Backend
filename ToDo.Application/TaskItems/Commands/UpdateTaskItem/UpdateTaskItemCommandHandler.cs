@@ -26,8 +26,8 @@ namespace ToDo.Application.TaskItems.Commands.UpdateTaskItem
             taskItem.Title = request.Title;
             taskItem.Description = request.Description;
             taskItem.IsAllDay = request.IsAllDay;
-            taskItem.StartDate = request.StartDate;
-            taskItem.EndDate = request.EndDate;
+            taskItem.StartDate = request.StartDate.ToOffset(TimeSpan.Zero);
+            taskItem.EndDate = request.EndDate.ToOffset(TimeSpan.Zero);
             taskItem.Color = request.Color;
             taskItem.IsRecurring = request.IsRecurring;
             taskItem.RecurrenceRule = request.RecurrenceRule;
